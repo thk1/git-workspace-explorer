@@ -17,8 +17,15 @@ class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
 	}
 }
 
+function getBaseDirectories(): vscode.Uri[] {
+	const dirs = vscode.workspace.getConfiguration('git-workspace-explorer').get<string[]>('base-directories') ?? [];
+	return dirs.map(dir => vscode.Uri.file(dir));
+}
+
 async function getGitWorkspaces(): Promise<GitWorkspace[]> {
-	const gitdirs = (await fg.glob('/home/**/*.git', {onlyFiles: false, dot: true, suppressErrors: true}));
+	const baseDirs = getBaseDirectories();
+	const globOptions = { onlyFiles: false, dot: true, suppressErrors: true };
+	const gitdirs = (await Promise.all(baseDirs.map(async baseDir => await fg.glob(`${baseDir.fsPath}/**/.git`, globOptions)))).flat();
 	return await Promise.all(gitdirs.map(async dir => await createGitWorkspace(dir)));
 }
 

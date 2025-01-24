@@ -29,6 +29,18 @@
           "contextualTitle": "Git Workspace Explorer"
         }
       ]
+    },
+    "configuration": {
+      "title": "Git Workspace Explorer",
+      "properties": {
+        "git-workspace-explorer.base-directories": {
+          "type": "array",
+          "description": "Directories in which it shall be looked for git workspaces",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
   },
   "scripts": {
