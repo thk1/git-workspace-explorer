@@ -4,7 +4,7 @@ import path from 'path';
 import simpleGit from 'simple-git';
 
 export function activate(context: vscode.ExtensionContext) {
-	const gitWorkspaceProvider = new GitWorkspaceProvider()
+	const gitWorkspaceProvider = new GitWorkspaceProvider();
 	context.subscriptions.push(vscode.window.registerTreeDataProvider('git-workspace-explorer', gitWorkspaceProvider));
 }
 
