@@ -4,8 +4,8 @@ import path from 'path';
 import simpleGit from 'simple-git';
 
 export function activate(context: vscode.ExtensionContext) {
-	const treeDataProvider = vscode.window.registerTreeDataProvider('git-workspace-explorer', new GitWorkspaceProvider());
-	context.subscriptions.push(treeDataProvider);
+	const gitWorkspaceProvider = new GitWorkspaceProvider()
+	context.subscriptions.push(vscode.window.registerTreeDataProvider('git-workspace-explorer', gitWorkspaceProvider));
 }
 
 class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
@@ -13,23 +13,33 @@ class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
 		return element;
 	}
 	public async getChildren(element?: GitWorkspace | undefined): Promise<GitWorkspace[]> {
-		if (element === undefined) {
-			return await getGitWorkspaces();
-		}
-		return [];
+		return element === undefined ? await getGitWorkspaces() : [];
 	}
 }
 
 async function getGitWorkspaces(): Promise<GitWorkspace[]> {
-	const gitdirs = (await fg.glob('/home/**/*.git', {onlyFiles: false, dot: true})).map(dir => path.dirname(dir));
-	return await Promise.all(gitdirs.map(async dir => { 
-		const branchName = (await simpleGit(dir).status()).current ?? '';
-		return {
-			uri: vscode.Uri.file(dir),
-			label: path.basename(dir),
-			description: branchName
-		};
-	}));
+	const gitdirs = (await fg.glob('/home/**/*.git', {onlyFiles: false, dot: true, suppressErrors: true}));
+	return await Promise.all(gitdirs.map(async dir => await createGitWorkspace(dir)));
+}
+
+async function createGitWorkspace(gitdir: string): Promise<GitWorkspace> {
+	const dir = path.dirname(gitdir);
+	const branchName = (await simpleGit(dir).status()).current ?? '';
+	const tooltip = `Open ${dir}`;
+	const command: vscode.Command = {
+		title: 'Open workspace',
+		command: 'vscode.openFolder',
+		tooltip: tooltip,
+		arguments: [vscode.Uri.file(dir)]
+	};
+	return {
+		uri: vscode.Uri.file(dir),
+		label: path.basename(dir),
+		iconPath: vscode.ThemeIcon.Folder,
+		tooltip: tooltip,
+		description: branchName,
+		command: command
+	};
 }
 
 interface GitWorkspace extends vscode.TreeItem {
