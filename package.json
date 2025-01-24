@@ -2,22 +2,34 @@
   "name": "git-workspace-explorer",
   "displayName": "Git Workspace Explorer",
   "description": "List local git repositories in the sidebar and open them as workspace",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.96.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "git-workspace-explorer.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "git-workspace-explorer",
+          "title": "Git Workspace Explorer",
+          "icon": "$(extensions-star-full)"
+        }
+      ]
+    },
+    "views": {
+      "git-workspace-explorer": [
+        {
+          "id": "git-workspace-explorer",
+          "name": "Git Workspace Explorer",
+          "contextualTitle": "Git Workspace Explorer"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
@@ -34,16 +46,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "esbuild": "^0.24.0",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.3",
+    "simple-git": "^3.27.0"
   }
 }

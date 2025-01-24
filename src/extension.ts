@@ -1,26 +1,37 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import fg from 'fast-glob';
+import path from 'path';
+import simpleGit from 'simple-git';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "git-workspace-explorer" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('git-workspace-explorer.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Git Workspace Explorer!');
-	});
-
-	context.subscriptions.push(disposable);
+	const treeDataProvider = vscode.window.registerTreeDataProvider('git-workspace-explorer', new GitWorkspaceProvider());
+	context.subscriptions.push(treeDataProvider);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
+	public getTreeItem(element: GitWorkspace): vscode.TreeItem {
+		return element;
+	}
+	public async getChildren(element?: GitWorkspace | undefined): Promise<GitWorkspace[]> {
+		if (element === undefined) {
+			return await getGitWorkspaces();
+		}
+		return [];
+	}
+}
+
+async function getGitWorkspaces(): Promise<GitWorkspace[]> {
+	const gitdirs = (await fg.glob('/home/**/*.git', {onlyFiles: false, dot: true})).map(dir => path.dirname(dir));
+	return await Promise.all(gitdirs.map(async dir => { 
+		const branchName = (await simpleGit(dir).status()).current ?? '';
+		return {
+			uri: vscode.Uri.file(dir),
+			label: path.basename(dir),
+			description: branchName
+		};
+	}));
+}
+
+interface GitWorkspace extends vscode.TreeItem {
+	uri: vscode.Uri;
+}
