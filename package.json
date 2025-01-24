@@ -4,12 +4,16 @@
   "description": "List local git repositories in the sidebar and open them as workspace",
   "version": "0.1.0",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/thk1/git-workspace-explorer"
+  },
   "engines": {
     "vscode": "^1.96.0"
   },
   "categories": [
     "Other"
   ],
+  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
