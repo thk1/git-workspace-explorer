@@ -48,6 +48,18 @@
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "git-workspace-explorer",
+        "contents": "In order to use Git Workspace Explorer, you must configure at least one base directory which will be searched for Git repositories.\n[Configure Base Directories](command:gitWorkspaceExplorer.configure)",
+        "when": "!gitWorkspaceExplorer.hasBaseDirectories"
+      },
+      {
+        "view": "git-workspace-explorer",
+        "contents": "No Git repositories were found.\n[Configure Base Directories](command:gitWorkspaceExplorer.configure)",
+        "when": "gitWorkspaceExplorer.hasBaseDirectories"
+      }
+    ],
     "commands": [
       {
         "command": "gitWorkspaceExplorer.refresh",

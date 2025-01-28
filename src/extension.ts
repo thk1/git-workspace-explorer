@@ -10,13 +10,15 @@ export function activate(context: vscode.ExtensionContext) {
 		gitWorkspaceProvider.refresh();
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.configure', () => {
-		vscode.commands.executeCommand('workbench.action.openSettings', 'gitWorkspaceExplorer.baseDirectories|gitWorkspaceExplorer.scanDepth');
+		vscode.commands.executeCommand('workbench.action.openSettings', 'gitWorkspaceExplorer.baseDirectories gitWorkspaceExplorer.scanDepth');
 	}));
 	vscode.workspace.onDidChangeConfiguration(event => {
 		if (event.affectsConfiguration('gitWorkspaceExplorer')) {
 			gitWorkspaceProvider.refresh();
+			updateContext();
 		}
 	});
+	updateContext();
 }
 
 class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
@@ -31,6 +33,10 @@ class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
 	public async getChildren(element?: GitWorkspace | undefined): Promise<GitWorkspace[]> {
 		return element === undefined ? await getGitWorkspaces() : [];
 	}
+}
+
+async function updateContext(): Promise<void> {
+	await vscode.commands.executeCommand('setContext', 'gitWorkspaceExplorer.hasBaseDirectories', getBaseDirectories().length > 0);
 }
 
 function getBaseDirectories(): vscode.Uri[] {
