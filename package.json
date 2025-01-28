@@ -1,12 +1,17 @@
 {
   "name": "git-workspace-explorer",
   "displayName": "Git Workspace Explorer",
-  "description": "List local git repositories in the sidebar and open them as workspace",
+  "description": "List local Git repositories in the activity bar and open them with one click",
+  "publisher": "Thomas Keh",
+  "author": {
+    "name": "Thomas Keh"
+  },
   "version": "0.1.0",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/thk1/git-workspace-explorer"
   },
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -21,7 +26,7 @@
         {
           "id": "git-workspace-explorer",
           "title": "Git Workspace Explorer",
-          "icon": "$(folder)"
+          "icon": "activity.svg"
         }
       ]
     },

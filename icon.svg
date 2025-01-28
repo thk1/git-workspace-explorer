@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   fill="currentColor"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:export-filename="/home/th/dev/git-workspace-explorer/icon.png"
+   inkscape:export-xdpi="1536"
+   inkscape:export-ydpi="1536"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title5154">Git Workspace Explorer</title>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:lockguides="false"
+     inkscape:zoom="32"
+     inkscape:cx="18.09375"
+     inkscape:cy="-2.296875"
+     inkscape:window-width="3440"
+     inkscape:window-height="1381"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     d="M 11.562857,1.8333332 H 5.7428572 L 5.0142857,1.1250001 4.7142857,1 H 0.4285715 L 0,1.4166667 V 10.583333 L 0.4285715,11 l 3.8068725,0.0032 6.893649,-5.0719469 0.870016,-0.00417 v 0 L 12,2.2499999 Z M 0.84857,4.3416664 V 1.8416666 h 3.6771428 l 0.7285714,0.7083333 0.3085715,0.125 H 11.134284 L 11.129089,5.9312701 4.235444,11.003217 4.2182863,10.169883 0.84,10.166666 V 5.1666664"
+     id="path2"
+     style="stroke-width:0.845154;fill:#008000"
+     sodipodi:nodetypes="cccccccccccsccccccccccccc" />
+  <path
+     d="M 15.562857,5.8333332 H 9.7428572 L 9.0142857,5.1250001 8.7142857,5 H 4.4285715 L 4,5.4166667 V 14.583333 L 4.4285715,15 H 15.571428 L 16,14.583333 V 6.2499999 Z M 4.84857,8.3416664 V 5.8416666 h 3.6771428 l 0.7285714,0.7083333 0.3085715,0.125 h 5.5714283 l -0.0086,7.4916661 H 4.84 V 9.1666664"
+     id="path2-3"
+     style="stroke-width:0.845154;fill:#008000"
+     sodipodi:nodetypes="ccccccccccccccccccccc" />
+  <metadata
+     id="metadata5152">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Git Workspace Explorer</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:5.33333px;line-height:1.25;font-family:sans-serif;fill:#008000;fill-opacity:1;stroke:none"
+     x="6.3244553"
+     y="11.732084"
+     id="text8345"><tspan
+       sodipodi:role="line"
+       id="tspan8343"
+       x="6.3244553"
+       y="11.732084"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33333px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#008000">git</tspan></text>
+</svg>
