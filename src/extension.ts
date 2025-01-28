@@ -22,16 +22,24 @@ function getBaseDirectories(): vscode.Uri[] {
 	return dirs.map(dir => vscode.Uri.file(dir));
 }
 
+function getScanDepth(): number | undefined {
+	const depth = vscode.workspace.getConfiguration('git-workspace-explorer').get<number>('scan-depth') ?? -1;
+	// the .git directory we're looking for is one layer below the actual workspace
+	const realDepth = depth + 1;
+	return realDepth > 0 ? realDepth : undefined;
+}
+
 async function getGitWorkspaces(): Promise<GitWorkspace[]> {
 	const baseDirs = getBaseDirectories();
-	const globOptions = { onlyFiles: false, dot: true, suppressErrors: true };
+	const scanDepth = getScanDepth();
+	const globOptions: fg.Options = { onlyFiles: false, dot: true, suppressErrors: true, deep: scanDepth };
 	const gitdirs = (await Promise.all(baseDirs.map(async baseDir => await fg.glob(`${baseDir.fsPath}/**/.git`, globOptions)))).flat();
 	return await Promise.all(gitdirs.map(async dir => await createGitWorkspace(dir)));
 }
 
 async function getBranchName(dir: string): Promise<string | undefined> {
 	try {
-		const name = (await simpleGit(dir).revparse('--abbrev-ref HEAD')).trim();
+		const name = (await simpleGit(dir).revparse(['--abbrev-ref', 'HEAD'])).trim();
 		return name !== '' ? name : undefined;
 	} catch (_) {
 		return undefined;

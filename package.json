@@ -43,6 +43,11 @@
           "items": {
             "type": "string"
           }
+        },
+        "git-workspace-explorer.scan-depth": {
+          "type": "integer",
+          "description": "The maximum depth used when scanning the base directories for Git repositories. Can be set to -1 for no limit.",
+          "default": 3
         }
       }
     }
