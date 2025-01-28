@@ -6,9 +6,25 @@ import simpleGit from 'simple-git';
 export function activate(context: vscode.ExtensionContext) {
 	const gitWorkspaceProvider = new GitWorkspaceProvider();
 	context.subscriptions.push(vscode.window.registerTreeDataProvider('git-workspace-explorer', gitWorkspaceProvider));
+	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.refresh', () => {
+		gitWorkspaceProvider.refresh();
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.configure', () => {
+		vscode.commands.executeCommand('workbench.action.openSettings', 'gitWorkspaceExplorer.baseDirectories|gitWorkspaceExplorer.scanDepth');
+	}));
+	vscode.workspace.onDidChangeConfiguration(event => {
+		if (event.affectsConfiguration('gitWorkspaceExplorer')) {
+			gitWorkspaceProvider.refresh();
+		}
+	});
 }
 
 class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
+	private onDidChangeTreeDataEmitter = new vscode.EventEmitter<void>();
+	public onDidChangeTreeData = this.onDidChangeTreeDataEmitter.event;
+	public refresh() {
+		this.onDidChangeTreeDataEmitter.fire();
+	}
 	public getTreeItem(element: GitWorkspace): vscode.TreeItem {
 		return element;
 	}
@@ -18,12 +34,12 @@ class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
 }
 
 function getBaseDirectories(): vscode.Uri[] {
-	const dirs = vscode.workspace.getConfiguration('git-workspace-explorer').get<string[]>('base-directories') ?? [];
+	const dirs = vscode.workspace.getConfiguration('gitWorkspaceExplorer').get<string[]>('baseDirectories') ?? [];
 	return dirs.map(dir => vscode.Uri.file(dir));
 }
 
 function getScanDepth(): number | undefined {
-	const depth = vscode.workspace.getConfiguration('git-workspace-explorer').get<number>('scan-depth') ?? -1;
+	const depth = vscode.workspace.getConfiguration('gitWorkspaceExplorer').get<number>('scanDepth') ?? -1;
 	// the .git directory we're looking for is one layer below the actual workspace
 	const realDepth = depth + 1;
 	return realDepth > 0 ? realDepth : undefined;

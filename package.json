@@ -34,19 +34,47 @@
         }
       ]
     },
+    "menus": {
+      "view/title": [
+        {
+          "command": "gitWorkspaceExplorer.refresh",
+          "when": "view == git-workspace-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "gitWorkspaceExplorer.configure",
+          "when": "view == git-workspace-explorer",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "gitWorkspaceExplorer.refresh",
+        "icon": "$(refresh)",
+        "title": "Refresh"
+      },
+      {
+        "command": "gitWorkspaceExplorer.configure",
+        "icon": "$(notifications-configure)",
+        "title": "Configure base directories"
+      }
+    ],
     "configuration": {
       "title": "Git Workspace Explorer",
       "properties": {
-        "git-workspace-explorer.base-directories": {
+        "gitWorkspaceExplorer.baseDirectories": {
           "type": "array",
           "description": "Directories in which it shall be looked for git workspaces",
           "items": {
             "type": "string"
           }
         },
-        "git-workspace-explorer.scan-depth": {
+        "gitWorkspaceExplorer.scanDepth": {
           "type": "integer",
+          "title": "Scan Depth",
           "description": "The maximum depth used when scanning the base directories for Git repositories. Can be set to -1 for no limit.",
+          "category": "Git Workspace Explorer",
           "default": 3
         }
       }
