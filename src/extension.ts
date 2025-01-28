@@ -29,9 +29,18 @@ async function getGitWorkspaces(): Promise<GitWorkspace[]> {
 	return await Promise.all(gitdirs.map(async dir => await createGitWorkspace(dir)));
 }
 
+async function getBranchName(dir: string): Promise<string | undefined> {
+	try {
+		const name = (await simpleGit(dir).revparse('--abbrev-ref HEAD')).trim();
+		return name !== '' ? name : undefined;
+	} catch (_) {
+		return undefined;
+	}
+}
+
 async function createGitWorkspace(gitdir: string): Promise<GitWorkspace> {
 	const dir = path.dirname(gitdir);
-	const branchName = (await simpleGit(dir).status()).current ?? '';
+	const branchName = await getBranchName(dir) ?? '';
 	const tooltip = `Open ${dir}`;
 	const command: vscode.Command = {
 		title: 'Open workspace',
