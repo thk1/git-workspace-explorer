@@ -31,9 +31,11 @@ class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
 		return element;
 	}
 	public async getChildren(element?: GitWorkspace | undefined): Promise<GitWorkspace[]> {
-		return element === undefined ? await getGitWorkspaces() : [];
+		return element === undefined ? (await getGitWorkspaces()).sort(compareGitWorkspaces) : [];
 	}
 }
+
+
 
 async function updateContext(): Promise<void> {
 	await vscode.commands.executeCommand('setContext', 'gitWorkspaceExplorer.hasBaseDirectories', getBaseDirectories().length > 0);
@@ -90,4 +92,11 @@ async function createGitWorkspace(gitdir: string): Promise<GitWorkspace> {
 
 interface GitWorkspace extends vscode.TreeItem {
 	uri: vscode.Uri;
+	label: string;
+	description: string;
+}
+
+function compareGitWorkspaces(left: GitWorkspace, right: GitWorkspace): number {
+	const order = left.label.toString().localeCompare(right.label.toString());
+	return order !== 0 ? order : left.description.toString().localeCompare(right.description.toString());
 }
