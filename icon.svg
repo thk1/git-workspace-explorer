@@ -32,25 +32,15 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:lockguides="false"
-     inkscape:zoom="32"
-     inkscape:cx="18.09375"
-     inkscape:cy="-2.296875"
+     inkscape:zoom="11.313709"
+     inkscape:cx="-13.169863"
+     inkscape:cy="21.434173"
      inkscape:window-width="3440"
      inkscape:window-height="1381"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg4" />
-  <path
-     d="M 11.562857,1.8333332 H 5.7428572 L 5.0142857,1.1250001 4.7142857,1 H 0.4285715 L 0,1.4166667 V 10.583333 L 0.4285715,11 l 3.8068725,0.0032 6.893649,-5.0719469 0.870016,-0.00417 v 0 L 12,2.2499999 Z M 0.84857,4.3416664 V 1.8416666 h 3.6771428 l 0.7285714,0.7083333 0.3085715,0.125 H 11.134284 L 11.129089,5.9312701 4.235444,11.003217 4.2182863,10.169883 0.84,10.166666 V 5.1666664"
-     id="path2"
-     style="stroke-width:0.845154;fill:#008000"
-     sodipodi:nodetypes="cccccccccccsccccccccccccc" />
-  <path
-     d="M 15.562857,5.8333332 H 9.7428572 L 9.0142857,5.1250001 8.7142857,5 H 4.4285715 L 4,5.4166667 V 14.583333 L 4.4285715,15 H 15.571428 L 16,14.583333 V 6.2499999 Z M 4.84857,8.3416664 V 5.8416666 h 3.6771428 l 0.7285714,0.7083333 0.3085715,0.125 h 5.5714283 l -0.0086,7.4916661 H 4.84 V 9.1666664"
-     id="path2-3"
-     style="stroke-width:0.845154;fill:#008000"
-     sodipodi:nodetypes="ccccccccccccccccccccc" />
   <metadata
      id="metadata5152">
     <rdf:RDF>
@@ -60,15 +50,28 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <path
+     style="fill:none;stroke:#337799;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 6.4423713,14.523476 -2.273505,-0.02942 -7.78e-4,-9.0538686 4.246875,-0.00844 0.870992,0.763956 5.9799127,4.902e-4 0.03736,8.3446034 z"
+     id="path859" />
+  <path
+     style="fill:none;stroke:#2f7f96;stroke-width:1.3;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 4.0646635,10.61059 -3.39073397,-0.0169 -7.78e-4,-9.0538694 4.24687497,-0.00844 0.870992,0.763956 5.9799125,4.902e-4 -0.01355,3.6383244"
+     id="path859-3"
+     sodipodi:nodetypes="ccccccc" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 6.7840385,14.595734 v 0"
+     id="path861" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:5.33333px;line-height:1.25;font-family:sans-serif;fill:#008000;fill-opacity:1;stroke:none"
-     x="6.3244553"
-     y="11.732084"
-     id="text8345"><tspan
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.66667px;line-height:1.25;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono';fill:#000000;fill-opacity:1;stroke:none"
+     x="7.4559269"
+     y="12.76555"
+     id="text8929"><tspan
        sodipodi:role="line"
-       id="tspan8343"
-       x="6.3244553"
-       y="11.732084"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33333px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#008000">git</tspan></text>
+       id="tspan8927"
+       x="7.4559269"
+       y="12.76555"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.66667px;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono Bold';fill:#337899;fill-opacity:1">.git</tspan></text>
 </svg>
