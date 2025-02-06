@@ -2,7 +2,7 @@
   "name": "git-workspace-explorer",
   "displayName": "Git Workspace Explorer",
   "description": "List local Git repositories in the activity bar and open them with one click",
-  "publisher": "Thomas Keh",
+  "publisher": "thk1",
   "author": {
     "name": "Thomas Keh"
   },

@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 		gitWorkspaceProvider.refresh();
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.configure', () => {
-		vscode.commands.executeCommand('workbench.action.openSettings', 'gitWorkspaceExplorer.baseDirectories gitWorkspaceExplorer.scanDepth');
+		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:thk1.git-workspace-explorer');
 	}));
 	vscode.workspace.onDidChangeConfiguration(event => {
 		if (event.affectsConfiguration('gitWorkspaceExplorer')) {
