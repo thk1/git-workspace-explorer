@@ -13,6 +13,7 @@
    inkscape:export-ydpi="1536"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -21,7 +22,47 @@
   <title
      id="title5154">Git Workspace Explorer</title>
   <defs
-     id="defs8" />
+     id="defs8">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient41553">
+      <stop
+         style="stop-color:#548516;stop-opacity:1;"
+         offset="0"
+         id="stop41549" />
+      <stop
+         style="stop-color:#34461e;stop-opacity:1"
+         offset="1"
+         id="stop41551" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient41553"
+       id="linearGradient31558"
+       x1="4.1680884"
+       y1="5.4401875"
+       x2="15.303228"
+       y2="14.540797"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient41553"
+       id="linearGradient59107"
+       gradientUnits="userSpaceOnUse"
+       x1="0.67315155"
+       y1="1.5398206"
+       x2="11.836039"
+       y2="9.5457067" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient41553"
+       id="linearGradient59448"
+       x1="8.2129641"
+       y1="10.690881"
+       x2="13.72738"
+       y2="13.457608"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="namedview6"
      pagecolor="#ffffff"
@@ -32,9 +73,9 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:lockguides="false"
-     inkscape:zoom="11.313709"
-     inkscape:cx="-13.169863"
-     inkscape:cy="21.434173"
+     inkscape:zoom="22.627418"
+     inkscape:cx="16.749591"
+     inkscape:cy="19.113979"
      inkscape:window-width="3440"
      inkscape:window-height="1381"
      inkscape:window-x="0"
@@ -51,11 +92,7 @@
     </rdf:RDF>
   </metadata>
   <path
-     style="fill:none;stroke:#337799;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 6.4423713,14.523476 -2.273505,-0.02942 -7.78e-4,-9.0538686 4.246875,-0.00844 0.870992,0.763956 5.9799127,4.902e-4 0.03736,8.3446034 z"
-     id="path859" />
-  <path
-     style="fill:none;stroke:#2f7f96;stroke-width:1.3;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:url(#linearGradient59107);stroke-width:1.3;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 4.0646635,10.61059 -3.39073397,-0.0169 -7.78e-4,-9.0538694 4.24687497,-0.00844 0.870992,0.763956 5.9799125,4.902e-4 -0.01355,3.6383244"
      id="path859-3"
      sodipodi:nodetypes="ccccccc" />
@@ -65,7 +102,7 @@
      id="path861" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.66667px;line-height:1.25;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono';fill:#000000;fill-opacity:1;stroke:none"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.66667px;line-height:1.25;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono';fill:url(#linearGradient59448);fill-opacity:1;stroke:none"
      x="7.4559269"
      y="12.76555"
      id="text8929"><tspan
@@ -73,5 +110,9 @@
        id="tspan8927"
        x="7.4559269"
        y="12.76555"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.66667px;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono Bold';fill:#337899;fill-opacity:1">.git</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.66667px;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono Bold';fill:url(#linearGradient59448);fill-opacity:1">.git</tspan></text>
+  <path
+     style="fill:none;stroke:url(#linearGradient31558);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 6.4423713,14.523476 -2.273505,-0.02942 -7.78e-4,-9.0538686 4.246875,-0.00844 0.870992,0.763956 5.9799127,4.902e-4 0.03736,8.3446034 z"
+     id="path859" />
 </svg>
