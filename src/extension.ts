@@ -41,9 +41,8 @@ async function updateContext(): Promise<void> {
 	await vscode.commands.executeCommand('setContext', 'gitWorkspaceExplorer.hasBaseDirectories', getBaseDirectories().length > 0);
 }
 
-function getBaseDirectories(): vscode.Uri[] {
-	const dirs = vscode.workspace.getConfiguration('gitWorkspaceExplorer').get<string[]>('baseDirectories') ?? [];
-	return dirs.map(dir => vscode.Uri.file(dir));
+function getBaseDirectories(): string[] {
+	return vscode.workspace.getConfiguration('gitWorkspaceExplorer').get<string[]>('baseDirectories') ?? [];
 }
 
 function getScanDepth(): number | undefined {
@@ -57,7 +56,7 @@ async function getGitWorkspaces(): Promise<GitWorkspace[]> {
 	const baseDirs = getBaseDirectories();
 	const scanDepth = getScanDepth();
 	const globOptions: fg.Options = { onlyFiles: false, dot: true, suppressErrors: true, deep: scanDepth };
-	const gitdirs = (await Promise.all(baseDirs.map(async baseDir => await fg.glob(`${baseDir.fsPath}/**/.git`, globOptions)))).flat();
+	const gitdirs = (await Promise.all(baseDirs.map(async baseDir => await fg.glob(`${baseDir.replace('\\', '/')}/**/.git`, globOptions)))).flat();
 	return await Promise.all(gitdirs.map(async dir => await createGitWorkspace(dir)));
 }
 
