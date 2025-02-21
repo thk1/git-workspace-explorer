@@ -3,39 +3,62 @@ import fg from 'fast-glob';
 import path from 'path';
 import simpleGit from 'simple-git';
 
+// Global state key under which discovered workspaces are cached.
+const STORAGE_KEY = 'workspaces';
+
 export function activate(context: vscode.ExtensionContext) {
-	const gitWorkspaceProvider = new GitWorkspaceProvider();
+	const gitWorkspaceProvider = new GitWorkspaceProvider(context.globalState);
 	context.subscriptions.push(vscode.window.registerTreeDataProvider('git-workspace-explorer', gitWorkspaceProvider));
 	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.refresh', () => {
-		gitWorkspaceProvider.refresh();
+		refresh(context.globalState, gitWorkspaceProvider);
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.configure', () => {
 		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:thk1.git-workspace-explorer');
 	}));
 	vscode.workspace.onDidChangeConfiguration(event => {
 		if (event.affectsConfiguration('gitWorkspaceExplorer')) {
-			gitWorkspaceProvider.refresh();
+			refresh(context.globalState, gitWorkspaceProvider);
 			updateContext();
 		}
 	});
+	void refresh(context.globalState, gitWorkspaceProvider);
 	updateContext();
 }
 
 class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
 	private onDidChangeTreeDataEmitter = new vscode.EventEmitter<void>();
 	public onDidChangeTreeData = this.onDidChangeTreeDataEmitter.event;
+	public constructor(private readonly storage: vscode.Memento) {}
 	public refresh() {
 		this.onDidChangeTreeDataEmitter.fire();
 	}
-	public getTreeItem(element: GitWorkspace): vscode.TreeItem {
-		return element;
+	public getTreeItem(workspace: GitWorkspace): vscode.TreeItem {
+		const tooltip = `Open ${workspace.path}`;
+		const command: vscode.Command = {
+			title: 'Open workspace',
+			command: 'vscode.openFolder',
+			tooltip: tooltip,
+			arguments: [vscode.Uri.file(workspace.path)]
+		};
+		return {
+			label: path.basename(workspace.path),
+			iconPath: vscode.ThemeIcon.Folder,
+			tooltip: tooltip,
+			description: workspace.branchName,
+			command: command
+		};
 	}
 	public async getChildren(element?: GitWorkspace | undefined): Promise<GitWorkspace[]> {
-		return element === undefined ? (await getGitWorkspaces()).sort(compareGitWorkspaces) : [];
+		return element === undefined ? this.storage.get<GitWorkspace[]>(STORAGE_KEY) ?? [] : [];
 	}
 }
 
-
+async function refresh(storage: vscode.Memento, gitWorkspaceProvider: GitWorkspaceProvider) {
+	const workspaces = await findGitWorkspaces();
+	workspaces.sort(compareGitWorkspaces);
+	storage.update(STORAGE_KEY, workspaces);
+	gitWorkspaceProvider.refresh();
+}
 
 async function updateContext(): Promise<void> {
 	await vscode.commands.executeCommand('setContext', 'gitWorkspaceExplorer.hasBaseDirectories', getBaseDirectories().length > 0);
@@ -52,12 +75,12 @@ function getScanDepth(): number | undefined {
 	return realDepth > 0 ? realDepth : undefined;
 }
 
-async function getGitWorkspaces(): Promise<GitWorkspace[]> {
+async function findGitWorkspaces(): Promise<GitWorkspace[]> {
 	const baseDirs = getBaseDirectories();
 	const scanDepth = getScanDepth();
 	const globOptions: fg.Options = { onlyFiles: false, dot: true, suppressErrors: true, deep: scanDepth };
 	const gitdirs = (await Promise.all(baseDirs.map(async baseDir => await fg.glob(`${baseDir.replace('\\', '/')}/**/.git`, globOptions)))).flat();
-	return await Promise.all(gitdirs.map(async dir => await createGitWorkspace(dir)));
+	return await Promise.all(gitdirs.map(async dir => await createFromGitdir(dir)));
 }
 
 async function getBranchName(dir: string): Promise<string | undefined> {
@@ -69,33 +92,17 @@ async function getBranchName(dir: string): Promise<string | undefined> {
 	}
 }
 
-async function createGitWorkspace(gitdir: string): Promise<GitWorkspace> {
+async function createFromGitdir(gitdir: string): Promise<GitWorkspace> {
 	const dir = path.dirname(gitdir);
-	const branchName = await getBranchName(dir) ?? '';
-	const tooltip = `Open ${dir}`;
-	const command: vscode.Command = {
-		title: 'Open workspace',
-		command: 'vscode.openFolder',
-		tooltip: tooltip,
-		arguments: [vscode.Uri.file(dir)]
-	};
-	return {
-		uri: vscode.Uri.file(dir),
-		label: path.basename(dir),
-		iconPath: vscode.ThemeIcon.Folder,
-		tooltip: tooltip,
-		description: branchName,
-		command: command
-	};
+	return { path: dir, branchName: await getBranchName(dir) ?? ''};
 }
 
-interface GitWorkspace extends vscode.TreeItem {
-	uri: vscode.Uri;
-	label: string;
-	description: string;
+interface GitWorkspace {
+	path: string;
+	branchName: string;
 }
 
 function compareGitWorkspaces(left: GitWorkspace, right: GitWorkspace): number {
-	const order = left.label.toString().localeCompare(right.label.toString());
-	return order !== 0 ? order : left.description.toString().localeCompare(right.description.toString());
+	const order = left.path.toString().localeCompare(right.path.toString());
+	return order !== 0 ? order : left.branchName.toString().localeCompare(right.branchName.toString());
 }
