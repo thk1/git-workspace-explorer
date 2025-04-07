@@ -35,7 +35,8 @@
         {
           "id": "git-workspace-explorer",
           "name": "Git Workspace Explorer",
-          "contextualTitle": "Git Workspace Explorer"
+          "contextualTitle": "Git Workspace Explorer",
+          "icon": "icon.svg"
         }
       ]
     },
