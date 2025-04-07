@@ -1,26 +1,108 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import fg from 'fast-glob';
+import path from 'path';
+import simpleGit from 'simple-git';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+// Global state key under which discovered workspaces are cached.
+const STORAGE_KEY = 'workspaces';
+
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "git-workspace-explorer" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('git-workspace-explorer.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Git Workspace Explorer!');
+	const gitWorkspaceProvider = new GitWorkspaceProvider(context.globalState);
+	context.subscriptions.push(vscode.window.registerTreeDataProvider('git-workspace-explorer', gitWorkspaceProvider));
+	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.refresh', () => {
+		refresh(context.globalState, gitWorkspaceProvider);
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('gitWorkspaceExplorer.configure', () => {
+		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:thk1.git-workspace-explorer');
+	}));
+	vscode.workspace.onDidChangeConfiguration(event => {
+		if (event.affectsConfiguration('gitWorkspaceExplorer')) {
+			refresh(context.globalState, gitWorkspaceProvider);
+			updateContext();
+		}
 	});
-
-	context.subscriptions.push(disposable);
+	void refresh(context.globalState, gitWorkspaceProvider);
+	updateContext();
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+class GitWorkspaceProvider implements vscode.TreeDataProvider<GitWorkspace> {
+	private onDidChangeTreeDataEmitter = new vscode.EventEmitter<void>();
+	public onDidChangeTreeData = this.onDidChangeTreeDataEmitter.event;
+	public constructor(private readonly storage: vscode.Memento) {}
+	public refresh() {
+		this.onDidChangeTreeDataEmitter.fire();
+	}
+	public getTreeItem(workspace: GitWorkspace): vscode.TreeItem {
+		const tooltip = `Open ${workspace.path}`;
+		const command: vscode.Command = {
+			title: 'Open workspace',
+			command: 'vscode.openFolder',
+			tooltip: tooltip,
+			arguments: [vscode.Uri.file(workspace.path)]
+		};
+		return {
+			label: path.basename(workspace.path),
+			iconPath: vscode.ThemeIcon.Folder,
+			tooltip: tooltip,
+			description: workspace.branchName,
+			command: command
+		};
+	}
+	public async getChildren(element?: GitWorkspace | undefined): Promise<GitWorkspace[]> {
+		return element === undefined ? this.storage.get<GitWorkspace[]>(STORAGE_KEY) ?? [] : [];
+	}
+}
+
+async function refresh(storage: vscode.Memento, gitWorkspaceProvider: GitWorkspaceProvider) {
+	const workspaces = await findGitWorkspaces();
+	workspaces.sort(compareGitWorkspaces);
+	storage.update(STORAGE_KEY, workspaces);
+	gitWorkspaceProvider.refresh();
+}
+
+async function updateContext(): Promise<void> {
+	await vscode.commands.executeCommand('setContext', 'gitWorkspaceExplorer.hasBaseDirectories', getBaseDirectories().length > 0);
+}
+
+function getBaseDirectories(): string[] {
+	return vscode.workspace.getConfiguration('gitWorkspaceExplorer').get<string[]>('baseDirectories') ?? [];
+}
+
+function getScanDepth(): number | undefined {
+	const depth = vscode.workspace.getConfiguration('gitWorkspaceExplorer').get<number>('scanDepth') ?? -1;
+	// the .git directory we're looking for is one layer below the actual workspace
+	const realDepth = depth + 1;
+	return realDepth > 0 ? realDepth : undefined;
+}
+
+async function findGitWorkspaces(): Promise<GitWorkspace[]> {
+	const baseDirs = getBaseDirectories();
+	const scanDepth = getScanDepth();
+	const globOptions: fg.Options = { onlyFiles: false, dot: true, suppressErrors: true, deep: scanDepth };
+	const gitdirs = (await Promise.all(baseDirs.map(async baseDir => await fg.glob(`${baseDir.replace('\\', '/')}/**/.git`, globOptions)))).flat();
+	return await Promise.all(gitdirs.map(async dir => await createFromGitdir(dir)));
+}
+
+async function getBranchName(dir: string): Promise<string | undefined> {
+	try {
+		const name = (await simpleGit(dir).revparse(['--abbrev-ref', 'HEAD'])).trim();
+		return name !== '' ? name : undefined;
+	} catch (_) {
+		return undefined;
+	}
+}
+
+async function createFromGitdir(gitdir: string): Promise<GitWorkspace> {
+	const dir = path.dirname(gitdir);
+	return { path: dir, branchName: await getBranchName(dir) ?? ''};
+}
+
+interface GitWorkspace {
+	path: string;
+	branchName: string;
+}
+
+function compareGitWorkspaces(left: GitWorkspace, right: GitWorkspace): number {
+	const order = left.path.toString().localeCompare(right.path.toString());
+	return order !== 0 ? order : left.branchName.toString().localeCompare(right.branchName.toString());
+}

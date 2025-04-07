@@ -1,8 +1,17 @@
 {
   "name": "git-workspace-explorer",
   "displayName": "Git Workspace Explorer",
-  "description": "List local git repositories in the sidebar and open them as workspace",
-  "version": "0.0.1",
+  "description": "List local Git repositories in the activity bar and open them with one click",
+  "publisher": "thk1",
+  "author": {
+    "name": "Thomas Keh"
+  },
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/thk1/git-workspace-explorer"
+  },
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -12,12 +21,82 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "git-workspace-explorer",
+          "title": "Git Workspace Explorer",
+          "icon": "activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "git-workspace-explorer": [
+        {
+          "id": "git-workspace-explorer",
+          "name": "Git Workspace Explorer",
+          "contextualTitle": "Git Workspace Explorer",
+          "icon": "icon.svg"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "gitWorkspaceExplorer.refresh",
+          "when": "view == git-workspace-explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "gitWorkspaceExplorer.configure",
+          "when": "view == git-workspace-explorer",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "git-workspace-explorer",
+        "contents": "In order to use Git Workspace Explorer, you must configure at least one base directory which will be searched for Git repositories.\n[Configure Base Directories](command:gitWorkspaceExplorer.configure)",
+        "when": "!gitWorkspaceExplorer.hasBaseDirectories"
+      },
+      {
+        "view": "git-workspace-explorer",
+        "contents": "No Git repositories were found.\n[Configure Base Directories](command:gitWorkspaceExplorer.configure)",
+        "when": "gitWorkspaceExplorer.hasBaseDirectories"
+      }
+    ],
     "commands": [
       {
-        "command": "git-workspace-explorer.helloWorld",
-        "title": "Hello World"
+        "command": "gitWorkspaceExplorer.refresh",
+        "icon": "$(refresh)",
+        "title": "Refresh"
+      },
+      {
+        "command": "gitWorkspaceExplorer.configure",
+        "icon": "$(notifications-configure)",
+        "title": "Configure base directories"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Git Workspace Explorer",
+      "properties": {
+        "gitWorkspaceExplorer.baseDirectories": {
+          "type": "array",
+          "description": "Directories in which it shall be looked for git workspaces",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gitWorkspaceExplorer.scanDepth": {
+          "type": "integer",
+          "title": "Scan Depth",
+          "description": "The maximum depth used when scanning the base directories for Git repositories. Can be set to -1 for no limit.",
+          "category": "Git Workspace Explorer",
+          "default": 3
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
@@ -26,24 +105,22 @@
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
     "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
-    "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
     "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.2",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.3",
+    "simple-git": "^3.27.0"
   }
 }
